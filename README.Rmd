@@ -1,0 +1,37 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# ccwarcs
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Provides access to Common Crawl WARC files via Amazon Web Services.
+
+## Installation
+
+ <!-- You can install the released version of ccwarcs from [CRAN](https://CRAN.R-project.org) with: -->
+<!-- ``` r -->
+<!-- install.packages("ccwarcs") -->
+<!-- ``` -->
+
+You can install the development version of ccwarcs from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("jasonmtroos/ccwarcs")
+```
+
+```{r child = "vignettes/introduction-to-ccwarcs.Rmd"}
+```
