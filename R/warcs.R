@@ -33,11 +33,12 @@ cached_warc_path <- function(x, .options) {
 
 fetch_warc <- function(filename, start, end) {
   aws.s3::get_object(filename, "commoncrawl",
-                     headers = list("Range" = stringr::str_glue("bytes={start}-{end}")))
+    headers = list("Range" = stringr::str_glue("bytes={start}-{end}"))
+  )
 }
 cache_warc <- function(warc, warc_cache_file_fn) {
   ensure_directory_exists(warc_cache_file_fn)
-  con <- file(warc_cache_file_fn, "wb") 
+  con <- file(warc_cache_file_fn, "wb")
   writeBin(warc, con)
   close(con)
 }
@@ -58,13 +59,13 @@ read_warc_from_gzcon <- function(con, include_headers = FALSE) {
   payload <- stringr::str_c(warc[seq(warc_header_end, length(warc))], collapse = "\n")
   if (include_headers) {
     headers <- stringr::str_c(warc[seq_len(warc_header_end)], collapse = "\n")
-    return (list(headers = headers, payload  = payload))
+    return(list(headers = headers, payload = payload))
   } else {
-    return (payload)
+    return(payload)
   }
 }
 #' Get a WARC from the Common Crawl via AWS
-#' 
+#'
 #' The WARC is cached in a directory specified by the ```cache```  argument to [ccwarcs_options]
 #'
 #' @param filename AWS path to the WARC
@@ -72,34 +73,41 @@ read_warc_from_gzcon <- function(con, include_headers = FALSE) {
 #' @param length Number of bytes in the chunk
 #' @param digest Common Crawl digest for requested chunk
 #' @param include_headers If TRUE, include the WARC and HTTP headers in the result. See below.
+#' @param .options An optional object of class [ccwarcs_options]
 #' 
-#' @return HTML contents of the requested WARC, and optionally the WARC and HTTP headers. 
-#' If `include_headers = TRUE`, the result is a list with elements `headers` and `payload`. 
+#' @return HTML contents of the requested WARC, and optionally the WARC and HTTP headers.
+#' If `include_headers = TRUE`, the result is a list with elements `headers` and `payload`.
 #' Otherwise the result is a character string (vector) containing the HTML of the requested WARC.
 #' @export
-get_warc <- function(filename, offset, length, digest, include_headers = FALSE) {
+get_warc <- function(filename, offset, length, digest, include_headers = FALSE, .options = NULL) {
   if (length(filename) > 1) {
     opts <- furrr::future_options(globals = FALSE, scheduling = TRUE)
     if (include_headers) {
-      furrr::future_pmap(list(filename = as.list(filename), offset = as.list(offset), 
-                       length = as.list(length), digest = as.list(digest)),
-                   ~get_warc_impl(..1, ..2, ..3, ..4, include_headers = TRUE), 
-                   .progress = TRUE, .options = opts)
+      furrr::future_pmap(list(
+        filename = as.list(filename), offset = as.list(offset),
+        length = as.list(length), digest = as.list(digest)
+      ),
+      ~ get_warc_impl(..1, ..2, ..3, ..4, include_headers = TRUE, .options = .options),
+      .progress = TRUE, .options = opts
+      )
     } else {
-      furrr::future_pmap_chr(list(filename = as.list(filename), offset = as.list(offset),
-                           length = as.list(length), digest = as.list(digest)),
-                   ~get_warc_impl(..1, ..2, ..3, ..4, include_headers = FALSE), 
-                   .progress = TRUE, .options = opts)
+      furrr::future_pmap_chr(list(
+        filename = as.list(filename), offset = as.list(offset),
+        length = as.list(length), digest = as.list(digest)
+      ),
+      ~ get_warc_impl(..1, ..2, ..3, ..4, include_headers = FALSE, .options = .options),
+      .progress = TRUE, .options = opts
+      )
     }
   } else {
-    get_warc_impl(filename, offset, length, digest, include_headers)
+    get_warc_impl(filename, offset, length, digest, include_headers, .options = .options)
   }
 }
 get_warc_impl <- function(filename, offset, length, digest, include_headers = FALSE, .options = NULL) {
   if (is.null(.options)) {
     .options <- ccwarcs_options()
   }
-  warc_cache_file_fn  <- cached_warc_path(digest, .options)
+  warc_cache_file_fn <- cached_warc_path(digest, .options)
   if (file.exists(warc_cache_file_fn)) {
     warc <- read_warc_from_gzcon(warc_cache_file_fn, include_headers)
   } else {

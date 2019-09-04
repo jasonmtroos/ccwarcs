@@ -4,7 +4,8 @@
 \alias{get_warc}
 \title{Get a WARC from the Common Crawl via AWS}
 \usage{
-get_warc(filename, offset, length, digest, include_headers = FALSE)
+get_warc(filename, offset, length, digest, include_headers = FALSE,
+  .options = NULL)
 }
 \arguments{
 \item{filename}{AWS path to the WARC}
@@ -16,6 +17,8 @@ get_warc(filename, offset, length, digest, include_headers = FALSE)
 \item{digest}{Common Crawl digest for requested chunk}
 
 \item{include_headers}{If TRUE, include the WARC and HTTP headers in the result. See below.}
+
+\item{.options}{An optional object of class \link{ccwarcs_options}}
 }
 \value{
 HTML contents of the requested WARC, and optionally the WARC and HTTP headers.
