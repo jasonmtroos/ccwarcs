@@ -1,0 +1,30 @@
+---
+title: "Introduction to ccwarcs"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{introduction-to-ccwarcs}
+  %\VignetteEngine{knitr::rmarkdown_notangle}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+is_check <- ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_",
+             "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
+knitr::opts_chunk$set(eval = !is_check)
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+Sys.sleep(30)
+```
+
+
+```{r setup}
+library(ccwarcs)
+```

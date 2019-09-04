@@ -1,0 +1,37 @@
+Package: ccwarcs
+Title: Access to Common Crawl WARC Files via AWS
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Jason",
+           family = "Roos",
+           role = c("aut", "cre"),
+           email = "my_first_initial_and_last_name@rsm.nl")
+Description: Provides access to Common Crawl WARC files via Amazon Web Services.
+License: CC BY 4.0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+Imports: 
+    magrittr,
+    stringr,
+    jsonlite,
+    httr,
+    furrr,
+    tibble,
+    dplyr,
+    stringi,
+    aws.s3,
+    readr,
+    aws.signature,
+    rlang,
+    openssl,
+    purrr,
+    tidyr,
+    ArgumentCheck
+Suggests: 
+    testthat (>= 2.1.0),
+    knitr,
+    rmarkdown
+Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr
+BuildVignettes: no
