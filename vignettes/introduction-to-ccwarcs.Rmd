@@ -4,7 +4,7 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{introduction-to-ccwarcs}
   %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown_notangle}
+  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
 ---
@@ -17,17 +17,70 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Prerequisites
+
+This  package will not work unless you are signed  up for Amazon Web Services (AWS) and  have generated the appropriate security credentials.
+
+To obtain an AWS account, open the [AWS home page](https://portal.aws.amazon.com/gp/aws/developer/registration/index.html) and then click Sign Up.
+
+After you have created an AWS account, use the [Identity and Access Management (IAM) console](https://console.aws.amazon.com/iam/home#/home) to create a user. On the Permissions tab for  the new user, grant it the `AmazonS3ReadOnlyAccess` policy. On the Security credentials tab, create a new access key.
+
+To make the new security credentials available to the ccwarcs package, you will typically take one of two actions:
+
+1. Set the environment variables ('AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY',
+   'AWS_DEFAULT_REGION', and 'AWS_SESSION_TOKEN')
+
+2. Install and configure the AWS Command Line Interface https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html
+
+Additional options are documented at the [home page for the aws.signature package](https://github.com/cloudyr/aws.signature/blob/master/README.md).
+ 
+## Using ccwarcs
+
+Load the library.
+
 ```{r}
 library(ccwarcs)
 ```
 
-```{r include = FALSE, echo = FALSE}
-opts <- ccwarcs_options(cache = system.file('cache', package = 'ccwarcs'))
+Test whether AWS credentials can be located.
+
+```{r, include = FALSE}
+test_AWS_credentials <- function() {
+  message("Locating credentials
+Checking for credentials in user-supplied values
+Checking for credentials in Environment Variables
+Using Environment Variable 'AWS_ACCESS_KEY_ID' for AWS Access Key ID
+Using Environment Variable 'AWS_SECRET_ACCESS_KEY' for AWS Secret Access Key
+Using default value for AWS Region ('us-east-1')
+AWS credentials were found.")
+}
 ```
 
-```{r include = FALSE, eval = FALSE}
-opts <- ccwarcs_options()
+```{r}
+test_AWS_credentials()
 ```
+
+Create a new `ccwarcs_options` object with default values. If the directory `~/.ccwarcs_cache` does not already exist, the package will ask  if you would like to create it. 
+
+
+```{r include = FALSE, echo = FALSE}
+.opts <- ccwarcs_options(cache = system.file('cache', package = 'ccwarcs'))
+```
+
+```{r}
+opts <- ccwarcs_options()
+opts
+```
+
+```{r, include = FALSE}
+opts <- .opts
+```
+
+The `cdx_sleep` option determines the number of seconds to wait between calls to the Common Crawl Index Server. Values smaller than  the default of `0.3` may cause the index server to refuse your requests.
+
+The `cache` option determines where calls to the index server and web page archives will be cached on the local file system. The ccwarcs package is designed to minimize file downloads, which are very slow and makes extensive use of caching.
+
+The function `cdx_fetch_list_of_indexes` will retrieve the current, complete list of available crawl archives. Avoid calling this function too often.
 
 ```{r}
 list_of_indexes <- cdx_fetch_list_of_indexes()
@@ -35,31 +88,60 @@ list_of_indexes %>%
   dplyr::filter(stringr::str_detect(id, '2019'))
 ```
 
+Next, retrive index information about the URL [r-project.org](https://r-project.org) from the `2019-35` archive.
 
 ```{r}
-indexes <- c("2019-35", "2019-30", "2019-26")
-urls <- c('r-project.org', 'rstudio.com')
 cc_index <- 
-  get_cc_index(urls, indexes, .options = opts)  %>%
-  dplyr::filter(status == "200") %>%
-  dplyr::group_by(urlkey) %>%
-  dplyr::filter(timestamp == max((timestamp))) %>%
-  dplyr::ungroup()
-nrow(cc_index)
-
-warcs <- 
-  cc_index %>%
-  dplyr::mutate(warc = get_warc(filename, offset, length, digest, 
-                                include_headers = TRUE, .options  = opts)) %>%
-  magrittr::extract2('warc')
-length(warcs)
-length(warcs[[1]])
-
-rvest::minimal_html(warcs[[1]][[2]]) %>%
-  rvest::html_text() %>%
-  stringr::str_detect("R is a free software environment for statistical computing and graphics")
-rvest::minimal_html(warcs[[2]][[2]]) %>%
-  rvest::html_text() %>%
-  stringr::str_detect("An integrated development environment for R")
+  get_cc_index(urls = "r-project.org", indexes = "2019-35", .options = opts)
 ```
+
+The data returned corresponds with the following call to the index server:
+https://index.commoncrawl.org/CC-MAIN-2019-35-index?url=r-project.org&output=json
+
+The index information is held in a data frame.
+
+```{r}
+colnames(cc_index)
+```
+
+A web page archive (WARC) is uniquely described by the values in four columns.
+
+```{r}
+cc_index %>%
+  dplyr::select(filename, offset, length, digest) %>%
+  dplyr::glimpse()
+```
+
+Choose one of the archived versions of the `r-project.org` web page to  retrieve  from the archive.
+
+```{r}
+target_warc_index <- 
+  cc_index %>%
+  dplyr::filter(status == "200") %>%
+  dplyr::filter(timestamp == max((timestamp)))
+target_warc_index %>%
+  dplyr::glimpse()
+```
+
+Use the `get_warc` function to obtain the archived web page.
+
+```{r}
+warc <- 
+  target_warc_index %>%
+  dplyr::mutate(warc = get_warc(filename, offset, length, digest, 
+                                include_headers = FALSE, .options  = opts)) %>%
+  magrittr::extract2('warc')
+stringr::str_trunc(warc, width = 300) %>%
+  cat()
+```
+
+The web page archive can be converted into an HTML object and manipulated using the `rvest` package.
+
+```{r}
+warc %>%
+  rvest::minimal_html() %>%
+  rvest::html_nodes('#news + ul li p') %>%
+  rvest::html_text()
+```
+
 
