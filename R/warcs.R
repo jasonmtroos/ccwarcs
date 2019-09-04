@@ -1,22 +1,25 @@
 #' Test AWS credentials
-#' 
+#'
 #' A helper function that wraps [locate_credentials][aws.signature::locate_credentials] and provides
 #' advice if AWS credentials cannot be found.
-#' 
+#'
 #' @seealso [locate_credentials][aws.signature::locate_credentials]
 #' @export
 test_AWS_credentials <- function() {
-  creds <- aws.signature::locate_credentials(verbose  = TRUE)
+  creds <- aws.signature::locate_credentials(verbose = TRUE)
   not_set <- is.null(creds$key)
   if (not_set) {
-    h <- c('Unable to locate AWS credentials. Consider taking one of the following two actions:',
-           stringr::str_wrap('1. Set the environment variables (‘AWS_ACCESS_KEY_ID’, ‘AWS_SECRET_ACCESS_KEY’, ‘AWS_DEFAULT_REGION’, and ‘AWS_SESSION_TOKEN’)', exdent = 3),
-           stringr::str_wrap('2. Install and configure the AWS Command Line Interface https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html', exdent = 3))
+    h <- c(
+      "Unable to locate AWS credentials. Consider taking one of the following two actions:",
+      stringr::str_wrap("1. Set the environment variables ('AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'AWS_DEFAULT_REGION', and 'AWS_SESSION_TOKEN')", exdent = 3),
+      stringr::str_wrap("2. Install and configure the AWS Command Line Interface https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html", exdent = 3)
+    )
   } else {
-    h <- 'AWS credentials were found.'
+    h <- "AWS credentials were found."
   }
-  message(stringr::str_c(h, collapse = '\n'))
-  invisible(NULL)
+  message(stringr::str_c(h, collapse = "
+"))
+  invisible(!not_set)
 }
 
 cached_warc_path <- function(x, .options) {
