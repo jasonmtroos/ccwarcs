@@ -3,15 +3,12 @@ title: "Introduction to ccwarcs"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{introduction-to-ccwarcs}
-  %\VignetteEngine{knitr::rmarkdown_notangle}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown_notangle}
+editor_options: 
+  chunk_output_type: console
 ---
 
-```{r, include = FALSE}
-is_check <- ("CheckExEnv" %in% search()) || any(c("_R_CHECK_TIMINGS_",
-             "_R_CHECK_LICENSE_") %in% names(Sys.getenv()))
-knitr::opts_chunk$set(eval = !is_check)
-```
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -21,10 +18,48 @@ knitr::opts_chunk$set(
 ```
 
 ```{r}
-Sys.sleep(30)
-```
-
-
-```{r setup}
 library(ccwarcs)
 ```
+
+```{r include = FALSE, echo = FALSE}
+opts <- ccwarcs_options(cache = system.file('cache', package = 'ccwarcs'))
+```
+
+```{r include = FALSE, eval = FALSE}
+opts <- ccwarcs_options()
+```
+
+```{r}
+list_of_indexes <- cdx_fetch_list_of_indexes()
+list_of_indexes %>%
+  dplyr::filter(stringr::str_detect(id, '2019'))
+```
+
+
+```{r}
+indexes <- c("2019-35", "2019-30", "2019-26")
+urls <- c('r-project.org', 'rstudio.com')
+cc_index <- 
+  get_cc_index(urls, indexes, .options = opts)  %>%
+  dplyr::filter(status == "200") %>%
+  dplyr::group_by(urlkey) %>%
+  dplyr::filter(timestamp == max((timestamp))) %>%
+  dplyr::ungroup()
+nrow(cc_index)
+
+warcs <- 
+  cc_index %>%
+  dplyr::mutate(warc = get_warc(filename, offset, length, digest, 
+                                include_headers = TRUE, .options  = opts)) %>%
+  magrittr::extract2('warc')
+length(warcs)
+length(warcs[[1]])
+
+rvest::minimal_html(warcs[[1]][[2]]) %>%
+  rvest::html_text() %>%
+  stringr::str_detect("R is a free software environment for statistical computing and graphics")
+rvest::minimal_html(warcs[[2]][[2]]) %>%
+  rvest::html_text() %>%
+  stringr::str_detect("An integrated development environment for R")
+```
+
