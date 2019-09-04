@@ -31,7 +31,10 @@ Imports:
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    rvest
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
-BuildVignettes: no
+BuildVignettes: yes
+Depends: 
+    R (>= 3.5.0)
