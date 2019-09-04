@@ -96,5 +96,5 @@ get_cc_index_impl <- function(url, index, .options) {
     saveRDS(object = index_results, file = index_cache_results_fn)
     result <- tibble::as_tibble(index_results)
   }
-  dplyr::mutate_at(result, dplyr::vars(dplyr::matches("offset|status|length")), dplyr::funs(as.integer))
+  dplyr::mutate_at(result, dplyr::vars(dplyr::matches("offset|status|length")), tibble::lst(as.integer))
 }
