@@ -45,8 +45,8 @@ you will typically take one of two actions:
     ‘AWS\_SECRET\_ACCESS\_KEY’, ‘AWS\_DEFAULT\_REGION’, and
     ‘AWS\_SESSION\_TOKEN’)
 
-2.  Install and configure the AWS Command Line Interface
-    <https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html>
+2.  Install and configure the [AWS Command Line
+    Interface](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html)
 
 Additional options are documented at the [home page for the
 aws.signature
@@ -98,9 +98,9 @@ calls to the Common Crawl Index Server. Values smaller than the default
 of `0.3` may cause the index server to refuse your requests.
 
 The `cache` option determines where calls to the index server and web
-page archives will be cached on the local file system. The ccwarcs
-package is designed to minimize file downloads, which are very slow and
-makes extensive use of caching.
+page archives will be cached on the local file system. Accessing the
+index server and downloading WARCS over the internet is slow. The
+ccwarcs package minimizes downloads by caching both of these.
 
 The function `cdx_fetch_list_of_indexes` will retrieve the current,
 complete list of available crawl archives. Avoid calling this function
