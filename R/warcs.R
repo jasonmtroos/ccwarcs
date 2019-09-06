@@ -56,7 +56,7 @@ read_warc_from_gzcon <- function(con, include_headers = FALSE) {
   warc <- readr::read_lines(con)
   close(con)
   body_rows <- which(!stringr::str_detect(
-    warc[seq_len(70)], "(^HTTP|^WARC|^[A-Za-z\\-]+:|^$)"))
+    warc[seq_len(70)], "(^HTTP|^WARC|^[A-Za-z\\-\\_]+:|^$)"))
   if (length(body_rows) > 0) {
     warc_header_end <- min(body_rows, na.rm = TRUE) - 1L
   } else {
