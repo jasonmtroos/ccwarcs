@@ -2,5 +2,6 @@ pandoc: 2.3.1
 pkgdown: 1.4.0
 pkgdown_sha: ~
 articles:
+  Accessing-WARCs-from-the-Common-Crawl: Accessing-WARCs-from-the-Common-Crawl.html
   introduction-to-ccwarcs: introduction-to-ccwarcs.html
 

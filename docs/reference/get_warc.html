@@ -36,7 +36,8 @@
 
 
 <meta property="og:title" content="Get a WARC from the Common Crawl via AWS — get_warc" />
-<meta property="og:description" content="The WARC is cached in a directory specified by the cache  argument to ccwarcs_options" />
+<meta property="og:description" content="The WARC is cached in a directory specified by the
+cache  argument to ccwarcs_options" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -69,7 +70,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ccwarcs</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9004</span>
       </span>
     </div>
 
@@ -91,6 +92,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/Accessing-WARCs-from-the-Common-Crawl.html">Accessing WARCs from the Common Crawl</a>
+    </li>
     <li>
       <a href="../articles/introduction-to-ccwarcs.html">Introduction to ccwarcs</a>
     </li>
@@ -118,7 +122,8 @@
     </div>
 
     <div class="ref-description">
-    <p>The WARC is cached in a directory specified by the <code>cache</code>  argument to <a href='ccwarcs_options.html'>ccwarcs_options</a></p>
+    <p>The WARC is cached in a directory specified by the
+<code>cache</code>  argument to <a href='ccwarcs_options.html'>ccwarcs_options</a></p>
     </div>
 
     <pre class="usage"><span class='fu'>get_warc</span>(<span class='no'>filename</span>, <span class='no'>offset</span>, <span class='no'>length</span>, <span class='no'>digest</span>, <span class='kw'>include_headers</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
@@ -145,7 +150,8 @@
     </tr>
     <tr>
       <th>include_headers</th>
-      <td><p>If TRUE, include the WARC and HTTP headers in the result. See below.</p></td>
+      <td><p>If TRUE, include the WARC
+and HTTP headers in the result. See below.</p></td>
     </tr>
     <tr>
       <th>.options</th>
@@ -155,14 +161,17 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>HTML contents of the requested WARC, and optionally the WARC and HTTP headers.
-If <code>include_headers = TRUE</code>, the result is a list with elements <code>headers</code> and <code>payload</code>.
-Otherwise the result is a character string (vector) containing the HTML of the requested WARC.</p>
+    <p>HTML contents of the requested WARC, and optionally the WARC and HTTP
+headers. If <code>include_headers = TRUE</code>, the result is a list with elements
+<code>headers</code> and <code>payload</code>. Otherwise the result is a character string
+(vector) containing the HTML of the requested WARC.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>warc</span> <span class='kw'>&lt;-</span> <span class='fu'>get_warc</span>(<span class='kw'>filename</span> <span class='kw'>=</span> <span class='st'>"crawl-data/CC-MAIN-2019-35/segments/1566027317516.88/warc/CC-MAIN-20190822215308-20190823001308-00434.warc.gz"</span>,
-         <span class='kw'>offset</span> <span class='kw'>=</span> <span class='fl'>938342027</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>3019</span>, <span class='kw'>digest</span> <span class='kw'>=</span> <span class='st'>"ILB6S7TS5WMLJVJIUBRQA53XRK2I3DN7"</span>, <span class='kw'>include_headers</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>warc</span> <span class='kw'>&lt;-</span> <span class='fu'>get_warc</span>(<span class='kw'>filename</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"crawl-data/CC-MAIN-2019-35/segments/1566027317516.88/"</span>,
+           <span class='st'>"warc/CC-MAIN-20190822215308-20190823001308-00434.warc.gz"</span>),
+         <span class='kw'>offset</span> <span class='kw'>=</span> <span class='fl'>938342027</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>3019</span>, <span class='kw'>digest</span> <span class='kw'>=</span> <span class='st'>"ILB6S7TS5WMLJVJIUBRQA53XRK2I3DN7"</span>,
+         <span class='kw'>include_headers</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>warc</span><span class='kw'>[[</span><span class='fl'>1</span>]])
 <span class='fu'><a href='https://rdrr.io/r/base/cat.html'>cat</a></span>(<span class='no'>warc</span><span class='kw'>[[</span><span class='fl'>2</span>]])
 }</div></pre>
