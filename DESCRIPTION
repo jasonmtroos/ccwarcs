@@ -6,35 +6,37 @@ Authors@R:
            family = "Roos",
            role = c("aut", "cre"),
            email = "my_first_initial_and_last_name@rsm.nl")
-Description: Provides access to Common Crawl WARC files via Amazon Web Services.
+Description: Provides access to Common Crawl WARC files via
+    Amazon Web Services.
 License: GPL-3
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 6.1.1
-Imports: 
-    magrittr,
-    stringr,
-    jsonlite,
-    httr,
-    furrr,
-    tibble,
-    dplyr,
-    stringi,
-    aws.s3,
-    readr,
-    aws.signature,
-    rlang,
-    openssl,
-    purrr,
-    tidyr,
-    ArgumentCheck
-Suggests: 
-    testthat (>= 2.1.0),
-    knitr,
-    rmarkdown,
-    rvest
-Roxygen: list(markdown = TRUE)
-VignetteBuilder: knitr
-BuildVignettes: yes
 Depends: 
     R (>= 3.5.0)
+Imports: 
+    ArgumentCheck,
+    aws.s3,
+    aws.signature,
+    dplyr,
+    furrr,
+    httr,
+    jsonlite,
+    magrittr,
+    openssl,
+    purrr,
+    readr,
+    rlang,
+    stringi,
+    stringr,
+    tibble,
+    tidyr
+Suggests: 
+    knitr,
+    rmarkdown,
+    rvest,
+    testthat (>= 2.1.0)
+VignetteBuilder: 
+    knitr
+BuildVignettes: yes
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1

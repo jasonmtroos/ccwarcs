@@ -61,9 +61,9 @@ cdx_fetch_list_of_crawls <- function() {
 #' @param urls A vector of URLs of captured pages, allowing `*` as a wildcard character
 #' @param crawls A vector of Ids of CC crawls to search
 #'
-#' Values in `crawls` are typically character strings in the format `YYYY-ww`, e.g. 
+#' Values in `crawls` are typically character strings in the format `YYYY-ww`, e.g.
 #' 2018-47 for the crawl published in the 47th week of 2018.
-#' See <https://index.commoncrawl.org/> for a list of crawls, 
+#' See <https://index.commoncrawl.org/> for a list of crawls,
 #' and [cdx_fetch_list_of_crawls] for programmatic access
 #' to this list.
 #'

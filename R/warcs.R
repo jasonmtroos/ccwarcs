@@ -74,7 +74,7 @@ read_warc_from_gzcon <- function(con, include_headers = FALSE) {
 #' @param digest Common Crawl digest for requested chunk
 #' @param include_headers If TRUE, include the WARC and HTTP headers in the result. See below.
 #' @param .options An optional object of class [ccwarcs_options]
-#' 
+#'
 #' @return HTML contents of the requested WARC, and optionally the WARC and HTTP headers.
 #' If `include_headers = TRUE`, the result is a list with elements `headers` and `payload`.
 #' Otherwise the result is a character string (vector) containing the HTML of the requested WARC.
