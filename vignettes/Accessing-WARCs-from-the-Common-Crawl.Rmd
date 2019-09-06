@@ -1,0 +1,153 @@
+---
+title: "Accessing WARCs from the Common Crawl"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Load libraries.
+
+```{r setup}
+library(ccwarcs)
+library(tidyverse)
+library(rvest)
+library(tidytext)
+library(tm)
+```
+
+Test whether AWS credentials can be located.
+
+```{r}
+test_AWS_credentials() %>%
+  stopifnot()
+```
+
+Create a new `ccwarcs_options` object with default values. If the directory `~/.ccwarcs_cache` does not already exist, the package will ask if you would like to create it.
+
+```{r}
+opts <- ccwarcs_options()
+opts
+```
+
+Get the current list of crawls.
+
+```{r}
+crawls <- 
+  cdx_fetch_list_of_crawls() %>%
+  getElement('id')
+crawls
+```
+
+Search for archived  articles published  in   2018.
+
+```{r}
+url <- "https://www.sciencemag.org/news/2018/*"
+idx <- get_cc_index(url, crawls[1], .options = opts)
+```
+
+Get the HTML of the archived articles.
+
+```{r}
+warcs <-
+  idx %>%
+  filter(status == 200) %>%
+  mutate(page = get_warc(filename, offset,
+                         length, digest,
+                         .options = opts))
+```
+
+If  you would like to look at  the contents of the archived HTML, you can do  something like  the following. The code  below saves the HTML to a temporary file location, then opens it in  a web browser.
+
+```{r eval = FALSE}
+browse_html_string <- function(html)  {
+  fp <- tempfile(fileext = '.html')
+  readr::write_file(html, fp)
+  browseURL(paste0("file://", fp))
+}
+warcs$page[1]  %>%  
+  browse_html_string()
+```
+
+Looking at one of  the web pages (using the code above), determine which  part of the page you want  to extract. For these articles, the article's main text can be obtained with the code below. 
+
+```{r}
+article_text_from_html_string <- function(html) {
+  html %>%
+    minimal_html() %>%
+    html_nodes(".article__body p") %>%
+    html_text() %>%
+    str_c(collapse = "\n")
+}
+warcs$page[1] %>%
+  article_text_from_html_string() %>%
+  str_trunc(500) %>%
+  str_replace_all('\\s*\\n\\s*\\n', '\n') %>%
+  cat()
+```
+
+Extract the article text for all archived HTML pages.  
+
+```{r}
+articles <- 
+  warcs  %>%
+  mutate(article = map_chr(page,  ~article_text_from_html_string(.x)))
+```
+
+Use the `tidytext` package to tokenize the articles into words. Then remove common words (`stop_words`) and "words" comprising only numbers.
+
+```{r}
+article_words <- 
+  articles %>%
+  select(timestamp,  urlkey,  article) %>%
+  unnest_tokens(output = 'word', input = 'article', 
+                token = 'words',  format = 'text', 
+                to_lower = TRUE, drop = TRUE)  %>%
+  anti_join(stop_words, by = 'word') %>%
+  filter(!str_detect(word, '^[0-9\\.,]+$')) %>%
+  mutate(month = str_extract(urlkey, '/2018/[0-9]{2}/'),
+         month = as.integer(str_sub(month, 7, 8)))
+```
+
+For  each month, pool all words together, then calculate the term frequency  - inverse document frequency. Visualize the top 10 words per month.
+
+```{r}
+article_words %>%
+  select(month, word, article = urlkey) %>%
+  count(month, word, sort = TRUE) %>%
+  bind_tf_idf(word, month, n) %>%
+  group_by(month) %>%
+  top_n(10, tf_idf) %>%
+  filter(row_number() <= 10) %>%
+  ungroup() %>%
+  mutate(term = factor(word, ordered = TRUE) %>% fct_reorder(-tf_idf))  %>%
+  arrange(desc(term)) %>%
+  ggplot(aes(x = term,  y = tf_idf)) +
+  geom_bar(stat = 'identity')  +
+  facet_wrap(~month, scale = 'free_x') +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+
+For each article, calculate the Tf-Idf, then plot the most distinctive words across all  articles in 2018.
+
+```{r}
+article_words %>%
+  select(word, article = urlkey) %>%
+  count(article, word, sort = TRUE) %>%
+  bind_tf_idf(word, article, n) %>%
+  group_by(word) %>%
+  top_n(1, tf_idf) %>%
+  filter(row_number() == 1) %>%
+  ungroup() %>%
+  top_n(30, tf_idf) %>%
+  mutate(term = factor(word, ordered = TRUE) %>% fct_reorder(-tf_idf))  %>%
+  ggplot(aes(x = term, y = tf_idf)) +
+  geom_bar(stat = 'identity')  +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+

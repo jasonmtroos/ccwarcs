@@ -10,3 +10,4 @@
 ^CODE_OF_CONDUCT\.md$
 ^\.github$
 ^\.travis\.yml$
+^vignettes/Accessing-WARCs-from-the-Common-Crawl\.Rmd$
