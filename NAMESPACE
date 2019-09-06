@@ -2,7 +2,7 @@
 
 export("%>%")
 export(ccwarcs_options)
-export(cdx_fetch_list_of_indexes)
+export(cdx_fetch_list_of_crawls)
 export(get_cc_index)
 export(get_warc)
 export(test_AWS_credentials)

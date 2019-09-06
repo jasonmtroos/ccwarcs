@@ -102,13 +102,13 @@ page archives will be cached on the local file system. Accessing the
 index server and downloading WARCS over the internet is slow. The
 ccwarcs package minimizes downloads by caching both of these.
 
-The function `cdx_fetch_list_of_indexes` will retrieve the current,
+The function `cdx_fetch_list_of_crawls` will retrieve the current,
 complete list of available crawl archives. Avoid calling this function
 too often.
 
 ``` r
-list_of_indexes <- cdx_fetch_list_of_indexes()
-list_of_indexes %>%
+list_of_crawls <- cdx_fetch_list_of_crawls()
+list_of_crawls %>%
   dplyr::filter(stringr::str_detect(id, '2019'))
 #> # A tibble: 8 x 2
 #>   id      name               
@@ -124,7 +124,7 @@ list_of_indexes %>%
 ```
 
 Next, retrive index information about the URL
-[r-project.org](https://r-project.org) from the `2019-35` archive.
+[r-project.org](https://r-project.org) from the `2019-35` crawl.
 
 ``` r
 cc_index <- 

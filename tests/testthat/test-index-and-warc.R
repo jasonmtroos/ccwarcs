@@ -1,13 +1,13 @@
 test_that("index works", {
   opts <- ccwarcs_options(cache = system.file('cache', package = 'ccwarcs'))
   
-  indexes <- cdx_fetch_list_of_indexes()$id
-  expect_is(indexes, 'character')
-  expect_gte(length(indexes), 64)
-  indexes <- indexes[seq_len(3)]
+  crawls <- cdx_fetch_list_of_crawls()$id
+  expect_is(crawls, 'character')
+  expect_gte(length(crawls), 64)
+  crawls <- crawls[seq_len(3)]
   urls <- c('r-project.org', 'rstudio.com')
   cc_index <- 
-    get_cc_index(urls, indexes, .options = opts)  %>%
+    get_cc_index(urls, crawls, .options = opts)  %>%
     dplyr::filter(status == "200") %>%
     dplyr::group_by(urlkey) %>%
     dplyr::filter(timestamp == max((timestamp))) %>%
