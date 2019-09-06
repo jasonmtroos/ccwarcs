@@ -15,8 +15,16 @@ ccwarcs_options(cache = "~/.ccwarcs_cache", cdx_sleep = 0.3,
 \item{page_size}{An optional parameter to set the amount of data returned in each page}
 }
 \value{
-An list object of class \code{ccwarcs_options}
+A list object of class \code{ccwarcs_options}
 }
 \description{
 Set Options for the ccwarcs Package
+}
+\examples{
+\dontrun{
+opts <- ccwarcs_options(cache = "my_project_directory")
+url <- "http://www.celebuzz.com/2017-01-04"
+crawl <- "2018-47"
+results <- get_cc_index(url, crawl, .options = opts)
+}
 }

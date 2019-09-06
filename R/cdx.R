@@ -16,17 +16,22 @@ cdx_append_page_size_argument <- function(api_call, page_size = NULL) {
 cdx_get_number_of_pages_for_index <- function(api_url, .options) {
   Sys.sleep(.options$cdx_sleep)
 
-  api_call <- cdx_append_page_size_argument(stringr::str_c(api_url, "&showNumPages=TRUE"), .options$page_size)
+  api_call <- cdx_append_page_size_argument(
+    stringr::str_c(api_url, "&showNumPages=TRUE"), 
+    .options$page_size)
   page_info <- jsonlite::fromJSON(api_call)
   page_info$pages
 }
 cdx_fetch_index_page <- function(api_url, page, .options) {
   Sys.sleep(.options$cdx_sleep)
 
-  api_call <- cdx_append_page_size_argument(stringr::str_c(api_url, "&output=json&page=", page), .options$page_size)
+  api_call <- cdx_append_page_size_argument(
+    stringr::str_c(api_url, "&output=json&page=", page), 
+    .options$page_size)
   response <- httr::GET(api_call)
   results <- httr::content(response)
-  json_results <- stringr::str_c("[", stringr::str_replace_all(stringr::str_trim(results, side = "right"), "\n", ", "), "]")
+  json_results <- stringr::str_c("[", stringr::str_replace_all(
+    stringr::str_trim(results, side = "right"), "\n", ", "), "]")
   jsonlite::fromJSON(json_results)
 }
 cdx_fetch_index <- function(api_url, .options) {
@@ -48,9 +53,11 @@ cdx_fetch_index <- function(api_url, .options) {
 #' # not run:
 #' # cdx_fetch_list_of_crawls()
 cdx_fetch_list_of_crawls <- function() {
-  crawls <- tibble::as_tibble(jsonlite::fromJSON("https://index.commoncrawl.org/collinfo.json"))
+  crawls <- tibble::as_tibble(jsonlite::fromJSON(
+    "https://index.commoncrawl.org/collinfo.json"))
   crawls %>%
-    dplyr::transmute(id = stringr::str_replace(.data$id, "CC-MAIN-", ""), .data$name)
+    dplyr::transmute(id = stringr::str_replace(
+      .data$id, "CC-MAIN-", ""), .data$name)
 }
 
 
@@ -87,7 +94,8 @@ get_cc_index <- function(urls, crawls, .options = NULL) {
   )
 }
 get_cc_index_impl <- function(url, crawl, .options) {
-  api_call <- stringr::str_glue("http://index.commoncrawl.org/CC-MAIN-{crawl}-index?url={url}")
+  api_call <- stringr::str_glue(
+    "http://index.commoncrawl.org/CC-MAIN-{crawl}-index?url={url}")
   index_key_digest <- digest(stringi::stri_enc_toutf8(api_call))
   index_cache_results_fn <- cached_index_path(index_key_digest, .options)
   if (file.exists(index_cache_results_fn)) {
@@ -98,5 +106,6 @@ get_cc_index_impl <- function(url, crawl, .options) {
     saveRDS(object = index_results, file = index_cache_results_fn)
     result <- tibble::as_tibble(index_results)
   }
-  dplyr::mutate_at(result, dplyr::vars(dplyr::matches("offset|status|length")), list(as.integer))
+  dplyr::mutate_at(result, dplyr::vars(
+    dplyr::matches("offset|status|length")), list(as.integer))
 }

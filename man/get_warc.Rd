@@ -16,15 +16,28 @@ get_warc(filename, offset, length, digest, include_headers = FALSE,
 
 \item{digest}{Common Crawl digest for requested chunk}
 
-\item{include_headers}{If TRUE, include the WARC and HTTP headers in the result. See below.}
+\item{include_headers}{If TRUE, include the WARC
+and HTTP headers in the result. See below.}
 
 \item{.options}{An optional object of class \link{ccwarcs_options}}
 }
 \value{
-HTML contents of the requested WARC, and optionally the WARC and HTTP headers.
-If \code{include_headers = TRUE}, the result is a list with elements \code{headers} and \code{payload}.
-Otherwise the result is a character string (vector) containing the HTML of the requested WARC.
+HTML contents of the requested WARC, and optionally the WARC and HTTP
+headers. If \code{include_headers = TRUE}, the result is a list with elements
+\code{headers} and \code{payload}. Otherwise the result is a character string
+(vector) containing the HTML of the requested WARC.
 }
 \description{
-The WARC is cached in a directory specified by the \code{cache}  argument to \link{ccwarcs_options}
+The WARC is cached in a directory specified by the
+\code{cache}  argument to \link{ccwarcs_options}
+}
+\examples{
+\dontrun{
+warc <- get_warc(filename = paste0("crawl-data/CC-MAIN-2019-35/segments/1566027317516.88/",
+           "warc/CC-MAIN-20190822215308-20190823001308-00434.warc.gz"),
+         offset = 938342027, length = 3019, digest = "ILB6S7TS5WMLJVJIUBRQA53XRK2I3DN7", 
+         include_headers = TRUE)
+cat(warc[[1]])
+cat(warc[[2]])
+}
 }
