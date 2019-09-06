@@ -1,6 +1,6 @@
 Package: ccwarcs
 Title: Access to Common Crawl WARC Files via AWS
-Version: 0.0.0.9003
+Version: 0.0.0.9004
 Date: 2019-09-06
 Authors@R: 
     person(given = "Jason",
