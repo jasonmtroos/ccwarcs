@@ -6,7 +6,8 @@
 \alias{ccwarcs-package}
 \title{ccwarcs: Access to Common Crawl WARC Files via AWS}
 \description{
-Provides access to Common Crawl WARC files via Amazon Web Services.
+Provides access to Common Crawl WARC files via
+    Amazon Web Services.
 }
 \author{
 \strong{Maintainer}: Jason Roos \email{my_first_initial_and_last_name@rsm.nl}

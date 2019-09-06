@@ -99,7 +99,7 @@ of `0.3` may cause the index server to refuse your requests.
 
 The `cache` option determines where calls to the index server and web
 page archives will be cached on the local file system. Accessing the
-index server and downloading WARCS over the internet is slow. The
+index server and downloading WARCs over the internet is slow. The
 ccwarcs package minimizes downloads by caching both of these.
 
 The function `cdx_fetch_list_of_crawls` will retrieve the current,
