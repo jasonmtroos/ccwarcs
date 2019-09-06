@@ -12,7 +12,7 @@ get_cc_index(urls, indexes, .options = NULL)
 \item{indexes}{A vector of Ids of CC indexes to search
 
 \code{index} is typically in the format \code{YYYY-ww}, e.g. 2018-47 for the crawl published in the 47th week of 2018.
-See \url{https://index.commoncrawl.org/} for a list of crawls, and \link{cdx_fetch_list_of_indexes} for programmatic access
+See \url{https://index.commoncrawl.org/} for a list of crawls, and \link{cdx_fetch_list_of_crawls} for programmatic access
 to this list.}
 
 \item{.options}{An optional object of class \link{ccwarcs_options}}

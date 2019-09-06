@@ -46,8 +46,8 @@ cdx_fetch_index <- function(api_url, .options) {
 #'
 #' @examples
 #' # not run:
-#' # cdx_fetch_list_of_indexes()
-cdx_fetch_list_of_indexes <- function() {
+#' # cdx_fetch_list_of_crawls()
+cdx_fetch_list_of_crawls <- function() {
   indexes <- tibble::as_tibble(jsonlite::fromJSON("https://index.commoncrawl.org/collinfo.json"))
   indexes %>%
     dplyr::transmute(id = stringr::str_replace(.data$id, "CC-MAIN-", ""), .data$name)
@@ -62,7 +62,7 @@ cdx_fetch_list_of_indexes <- function() {
 #' @param indexes A vector of Ids of CC indexes to search
 #'
 #' `index` is typically in the format `YYYY-ww`, e.g. 2018-47 for the crawl published in the 47th week of 2018.
-#' See <https://index.commoncrawl.org/> for a list of crawls, and [cdx_fetch_list_of_indexes] for programmatic access
+#' See <https://index.commoncrawl.org/> for a list of crawls, and [cdx_fetch_list_of_crawls] for programmatic access
 #' to this list.
 #'
 #' @param .options An optional object of class [ccwarcs_options]
