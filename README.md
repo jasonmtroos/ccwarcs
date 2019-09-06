@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.org/jasonmtroos/ccwarcs.svg?branch=master)](https://travis-ci.org/jasonmtroos/ccwarcs)
 <!-- badges: end -->
 
 Provides access to Common Crawl WARC files via Amazon Web
