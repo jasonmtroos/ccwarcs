@@ -4,15 +4,17 @@
 \alias{get_cc_index}
 \title{Get a List of WARCs from Common Crawl Index Server}
 \usage{
-get_cc_index(urls, indexes, .options = NULL)
+get_cc_index(urls, crawls, .options = NULL)
 }
 \arguments{
 \item{urls}{A vector of URLs of captured pages, allowing \code{*} as a wildcard character}
 
-\item{indexes}{A vector of Ids of CC indexes to search
+\item{crawls}{A vector of Ids of CC crawls to search
 
-\code{index} is typically in the format \code{YYYY-ww}, e.g. 2018-47 for the crawl published in the 47th week of 2018.
-See \url{https://index.commoncrawl.org/} for a list of crawls, and \link{cdx_fetch_list_of_crawls} for programmatic access
+Values in \code{crawls} are typically character strings in the format \code{YYYY-ww}, e.g.
+2018-47 for the crawl published in the 47th week of 2018.
+See \url{https://index.commoncrawl.org/} for a list of crawls,
+and \link{cdx_fetch_list_of_crawls} for programmatic access
 to this list.}
 
 \item{.options}{An optional object of class \link{ccwarcs_options}}
@@ -26,6 +28,6 @@ The list of WARCs is cached in a directory specified by the \code{cache}  argume
 \examples{
 # not run:
 # url <- "http://www.celebuzz.com/2017-01-04"
-# index <- "2018-47"
-# results <- get_cc_index(url, index)
+# crawl <- "2018-47"
+# results <- get_cc_index(url, crawl)
 }

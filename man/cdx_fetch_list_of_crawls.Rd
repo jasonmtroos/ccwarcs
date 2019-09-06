@@ -2,7 +2,7 @@
 % Please edit documentation in R/cdx.R
 \name{cdx_fetch_list_of_crawls}
 \alias{cdx_fetch_list_of_crawls}
-\title{Get a List of Indexes from the Common Crawl Index Server}
+\title{Get a List of Crawls from the Common Crawl Index Server}
 \usage{
 cdx_fetch_list_of_crawls()
 }
@@ -10,7 +10,7 @@ cdx_fetch_list_of_crawls()
 A tibble
 }
 \description{
-Get a List of Indexes from the Common Crawl Index Server
+Get a List of Crawls from the Common Crawl Index Server
 }
 \examples{
 # not run:

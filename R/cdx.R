@@ -39,7 +39,7 @@ cdx_fetch_index <- function(api_url, .options) {
 }
 
 
-#' Get a List of Indexes from the Common Crawl Index Server
+#' Get a List of Crawls from the Common Crawl Index Server
 #'
 #' @return A tibble
 #' @export
@@ -48,8 +48,8 @@ cdx_fetch_index <- function(api_url, .options) {
 #' # not run:
 #' # cdx_fetch_list_of_crawls()
 cdx_fetch_list_of_crawls <- function() {
-  indexes <- tibble::as_tibble(jsonlite::fromJSON("https://index.commoncrawl.org/collinfo.json"))
-  indexes %>%
+  crawls <- tibble::as_tibble(jsonlite::fromJSON("https://index.commoncrawl.org/collinfo.json"))
+  crawls %>%
     dplyr::transmute(id = stringr::str_replace(.data$id, "CC-MAIN-", ""), .data$name)
 }
 
@@ -59,10 +59,12 @@ cdx_fetch_list_of_crawls <- function() {
 #' The list of WARCs is cached in a directory specified by the ```cache```  argument to [ccwarcs_options]
 #'
 #' @param urls A vector of URLs of captured pages, allowing `*` as a wildcard character
-#' @param indexes A vector of Ids of CC indexes to search
+#' @param crawls A vector of Ids of CC crawls to search
 #'
-#' `index` is typically in the format `YYYY-ww`, e.g. 2018-47 for the crawl published in the 47th week of 2018.
-#' See <https://index.commoncrawl.org/> for a list of crawls, and [cdx_fetch_list_of_crawls] for programmatic access
+#' Values in `crawls` are typically character strings in the format `YYYY-ww`, e.g. 
+#' 2018-47 for the crawl published in the 47th week of 2018.
+#' See <https://index.commoncrawl.org/> for a list of crawls, 
+#' and [cdx_fetch_list_of_crawls] for programmatic access
 #' to this list.
 #'
 #' @param .options An optional object of class [ccwarcs_options]
@@ -72,20 +74,20 @@ cdx_fetch_list_of_crawls <- function() {
 #' @examples
 #' # not run:
 #' # url <- "http://www.celebuzz.com/2017-01-04"
-#' # index <- "2018-47"
-#' # results <- get_cc_index(url, index)
-get_cc_index <- function(urls, indexes, .options = NULL) {
+#' # crawl <- "2018-47"
+#' # results <- get_cc_index(url, crawl)
+get_cc_index <- function(urls, crawls, .options = NULL) {
   if (is.null(.options)) {
     .options <- ccwarcs_options()
   }
-  uil <- as.list(tidyr::crossing(urls, indexes))
+  uil <- as.list(tidyr::crossing(urls, crawls))
   purrr::map2_dfr(
-    .x = as.list(uil$urls), .y = as.list(uil$indexes),
-    ~ get_cc_index_impl(url = .x, index = .y, .options = .options)
+    .x = as.list(uil$urls), .y = as.list(uil$crawls),
+    ~ get_cc_index_impl(url = .x, crawl = .y, .options = .options)
   )
 }
-get_cc_index_impl <- function(url, index, .options) {
-  api_call <- stringr::str_glue("http://index.commoncrawl.org/CC-MAIN-{index}-index?url={url}")
+get_cc_index_impl <- function(url, crawl, .options) {
+  api_call <- stringr::str_glue("http://index.commoncrawl.org/CC-MAIN-{crawl}-index?url={url}")
   index_key_digest <- digest(stringi::stri_enc_toutf8(api_call))
   index_cache_results_fn <- cached_index_path(index_key_digest, .options)
   if (file.exists(index_cache_results_fn)) {

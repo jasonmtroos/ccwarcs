@@ -128,7 +128,7 @@ Next, retrive index information about the URL
 
 ``` r
 cc_index <- 
-  get_cc_index(urls = "r-project.org", indexes = "2019-35", .options = opts)
+  get_cc_index(urls = "r-project.org", crawls = "2019-35", .options = opts)
 ```
 
 The data returned corresponds with the following call to the index
