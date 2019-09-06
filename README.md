@@ -221,3 +221,9 @@ warc %>%
 #> [5] "You can now support the R Foundation with a renewable subscription as a supporting member"                                                                     
 #> [6] "The R Foundation has been awarded the Personality/Organization of the year 2018 award by the professional association of German market and social researchers."
 ```
+
+## Contributing
+
+Please note that the ‘ccwarcs’ project is released with a [Contributor
+Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this project,
+you agree to abide by its terms.
