@@ -52,6 +52,16 @@
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-147397974-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-147397974-2');
+</script>
+
 
   </head>
 
@@ -69,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ccwarcs</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9004</span>
       </span>
     </div>
 
@@ -92,13 +102,21 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/Accessing-WARCs-from-the-Common-Crawl.html">Accessing WARCs from the Common Crawl</a>
+    </li>
+    <li>
       <a href="../articles/introduction-to-ccwarcs.html">Introduction to ccwarcs</a>
     </li>
   </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/jasonmtroos/ccwarcs">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -113,7 +131,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get a List of WARCs from Common Crawl Index Server</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/jasonmtroos/ccwarcs/blob/master/R/cdx.R'><code>R/cdx.R</code></a></small>
     <div class="hidden name"><code>get_cc_index.Rd</code></div>
     </div>
 
